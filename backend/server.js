@@ -10,6 +10,11 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json()); //fizemos isso aqui pra liberar envio de json nas requests
+//antes disso ficava bugando o POST pra fazer signin dos usuarios
+app.use(express.urlencoded({ extended: true })); 
+//com esses dois middlewares acima, toda requisicao que tem dados em body, traduzimos como direct.body na aplicacao node 
+
 //conectando aplicacao ao mongodb
 mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost/amazona', {
   useNewUrlParser: true,
