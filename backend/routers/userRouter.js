@@ -21,6 +21,27 @@ expressAsyncHandler(async (req, res) => {
   res.send({ users });
 }));
 
+userRouter.post('/register',
+expressAsyncHandler(async (req,res) => {
+    //verificar se ja tem alguem com esse (nome/email)
+    const user = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8), //esse oito eh o segundo parametro chamado "salt"
+    })
+
+    const createdUser = await user.save();
+    res.send({
+      _id: createdUser._id,
+      name: createdUser.name,
+      email: createdUser.email,
+      isAdmin: createdUser.isAdmin,
+      token: generateToken(createdUser),
+      });
+    }
+  )
+);
+
 userRouter.post('/signin',
 expressAsyncHandler(async (req, res) => {
   const user = await User.findOne({email: req.body.email});
